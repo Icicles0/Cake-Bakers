@@ -1,40 +1,34 @@
-#include <raylib.h>
+#include "raylib.h"
 
-void Draw(Camera3D camera)
-{
-    ClearBackground(RAYWHITE);
-
-    BeginMode3D(camera);
-        DrawPlane((Vector3){ 0.0f, 0.0f, 0.0f }, (Vector2){ 32.0f, 32.0f }, LIGHTGRAY);
-    EndMode3D();
-}
-
-int main(void) 
+int main(void)
 {
     const int screenWidth = 800;
     const int screenHeight = 450;
 
-    InitWindow(screenWidth, screenHeight, "Cake Bakers");
+    InitWindow(screenWidth, screenHeight, "Cake Bakers BETA");
 
-    Camera camera = { 0 };
-    camera.position = (Vector3){ 4.0f, 2.0f, 4.0f };
-    camera.target = (Vector3){ 0.0f, 1.8f, 0.0f };
-    camera.up = (Vector3){ 0.0f, 1.0f, 0.0f };
-    camera.fovy = 60.0f;
-    camera.projection = CAMERA_PERSPECTIVE;
-
-    SetCameraMode(camera, CAMERA_FIRST_PERSON);
-
+    Vector2 playerPosition = { (float)screenWidth/2, (float)screenHeight/2 };
     SetTargetFPS(60);
 
     while (!WindowShouldClose())
     {
-        UpdateCamera(&camera);
 
+        if (IsKeyDown(KEY_D)) playerPosition.x += 2.0f;
+        if (IsKeyDown(KEY_A)) playerPosition.x -= 2.0f;
+        if (IsKeyDown(KEY_W)) playerPosition.y -= 2.0f;
+        if (IsKeyDown(KEY_S)) playerPosition.y += 2.0f;
+        
         BeginDrawing();
-            Draw(camera);
+
+            ClearBackground(RAYWHITE);
+
+            DrawRectangleV(playerPosition, (Vector2){10,10}, RED);
+
         EndDrawing();
+        //----------------------------------------------------------------------------------
     }
 
-    CloseWindow();
+    // De-Initialization
+    //--------------------------------------------------------------------------------------
+    CloseWindow();        // Close window and OpenGL context
 }
